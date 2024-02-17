@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asefile", "Asefile\Asefile.csproj", "{C4FBF625-35F3-41E0-A0A9-764C63CB8DA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsefileTests", "AsefileTests\AsefileTests.csproj", "{395858C4-F988-4CC9-8141-5514295C7711}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C4FBF625-35F3-41E0-A0A9-764C63CB8DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4FBF625-35F3-41E0-A0A9-764C63CB8DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4FBF625-35F3-41E0-A0A9-764C63CB8DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4FBF625-35F3-41E0-A0A9-764C63CB8DA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{395858C4-F988-4CC9-8141-5514295C7711}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{395858C4-F988-4CC9-8141-5514295C7711}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{395858C4-F988-4CC9-8141-5514295C7711}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{395858C4-F988-4CC9-8141-5514295C7711}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

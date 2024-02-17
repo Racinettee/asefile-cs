@@ -117,6 +117,9 @@ public class AseHeader
  */
 public class AseFrame
 {
+    /// <summary>
+    /// The number of milliseconds this frame sticks around for
+    /// </summary>
     public ushort                  FrameDuration { get; set; }
     public List<PaletteChunkPartition>      Palettes { get; set; } = new();
     public List<LayerChunkPartition>        Layers { get; set; } = new();

@@ -372,7 +372,6 @@ public class CelExtraChunkPartition : AseChunkPartition
     public virtual float PreciseYPos { get; set; }
     public virtual float WidthOfCelInSprite { get; set; }
     public virtual float HeightOfCelInSprite { get; set; }
-    private byte[] Reserved { get; set; } // 16 bytes of reserved
 
     public CelExtraChunkPartition()
     {
@@ -390,7 +389,7 @@ public class CelExtraChunkPartition : AseChunkPartition
         PreciseYPos = reader.ReadSingle();
         WidthOfCelInSprite = reader.ReadSingle();
         HeightOfCelInSprite = reader.ReadSingle();
-        reader.Read(new byte[16]);
+        reader.Read(new byte[16]); // 16 reserved bytes
     }
 }
 
@@ -402,10 +401,10 @@ public class ColorProfileChunkPartition : AseChunkPartition
     public virtual ushort Type { get; set; } // 0: no color profile, 1: use srgb, 2: use embeded icc profile
     public virtual ushort Flags { get; set; }
     public virtual float  Gamma { get; set; }
-    private byte[] Reserved { get; set; }
+
     // + if type == icc
-    public virtual uint ICCProfileDataLen { get; set; }
-    public virtual byte[] ICCProfile { get; set; }
+    public virtual uint IccProfileDataLen { get; set; }
+    public virtual byte[]? IccProfile { get; set; }
 
     public ColorProfileChunkPartition()
     {
@@ -424,8 +423,8 @@ public class ColorProfileChunkPartition : AseChunkPartition
         reader.Read(new byte[8]); // reserved, set 0
         if (Type == 2) // ICC
         {
-            ICCProfileDataLen = reader.ReadUInt32();
-            ICCProfile = reader.ReadBytes((int)ICCProfileDataLen);
+            IccProfileDataLen = reader.ReadUInt32();
+            IccProfile = reader.ReadBytes((int)IccProfileDataLen);
         }
     }
 }
@@ -521,7 +520,6 @@ public class Tag : AseChunkPartition
     public virtual ushort ToFrame { get; set; }
     public virtual byte   LoopDirection { get; set; }
     public virtual ushort RepeatTimes { get; set; }
-    public virtual byte   ExtraZero { get; set; }
     public virtual string TagName { get; set; }
 
     public Tag()
@@ -529,6 +527,11 @@ public class Tag : AseChunkPartition
     }
 
     public Tag(BinaryReader reader)
+    {
+        Decode(reader);
+    }
+
+    public void Decode(BinaryReader reader)
     {
         FromFrame = reader.ReadUInt16();
         ToFrame = reader.ReadUInt16();
