@@ -39,7 +39,8 @@ public class AseHeader
     public virtual ushort HeightPixels { get; set; }
     public virtual ushort ColorDepth { get; set; } // bpp: 32 (rgba), 16 (grayscale), 8 (indexed)
     public virtual uint Flags { get; set; }
-    public virtual ushort Speed { get; set; } // DEPRECATED: use the frame duration field from each frame header
+    [Obsolete("You should use the frame duration field from each frame header")]
+    public virtual ushort Speed { get; set; }
     public virtual byte PaletteEntryIndex { get; set; }
     public virtual ushort NumberOfColors { get; set; } // 0 means 256 in old sprites
     public virtual byte PixelWidth { get; set; } // if this or pixel height = 0, ratio is 1:1
