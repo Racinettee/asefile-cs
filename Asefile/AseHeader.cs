@@ -222,5 +222,19 @@ public class AseFrame
 
         if ((streamOffsetEnd - streamOffsetBegin) != bytesThisFrame)
             throw new AseFileReadException("incorrect frame size read");
+
+        Cels.Sort(new CelChunkComparer());
+    }
+}
+
+internal class CelChunkComparer : IComparer<CelChunkPartition>
+{
+    public int Compare(CelChunkPartition? x, CelChunkPartition? y)
+    {
+        if (x is null)
+            return -1;
+        if (y is null)
+            return 1;
+        return x.Order.CompareTo(y.Order);
     }
 }

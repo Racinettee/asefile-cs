@@ -7,6 +7,7 @@ This library is a utility for just loading aseprite image data
 ## Future goals
 - To support encoding
 - Test other color encodings
+- Include basic class libs for monogame & godot that achieve whats shown in the examples
 # Example: Render in MonoGame
 ```csharp
 private Texture2D chicaTexture;

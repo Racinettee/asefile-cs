@@ -211,6 +211,12 @@ public class CelChunkPartition : AseChunkPartition
     public virtual uint   BitmaskForDiagFlip { get; set; }
     public virtual byte[] TileData { get; set; } // always zlib compressed
 
+    /// <summary>
+    /// Generates an order value so that sorting the cel is easier
+    /// see note.5 of the spec
+    /// </summary>
+    public int Order => LayerIndex + ZIndex;
+
     public virtual CelExtraChunkPartition? Extra { get; set; }= null;
 
     private int chunkSize = 0;

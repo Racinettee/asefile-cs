@@ -56,7 +56,6 @@ public class AsefileTests
         Assert.Equal(2, tags[1].LoopDirection);
         Assert.Equal(5, tags[1].RepeatTimes);
     }
-
     [Fact]
     public void LayerData()
     {
