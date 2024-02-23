@@ -73,7 +73,7 @@ public class AsefileTests
         Assert.Equal("Base/Hair", layers[4].LayerName);
         // 75%, the percentage value is of 255
         Assert.Equal(75 * 255 / 100 /* 191 */, layers[3].Opacity);
-        Assert.Equal(5 /* lighten */, layers[3].BlendMode);
+        Assert.Equal(BlendMode.Lighten /* lighten */, layers[3].BlendMode);
     }
     
 }

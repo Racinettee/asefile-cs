@@ -105,7 +105,7 @@ public class LayerChunkPartition : AseChunkPartition
     public virtual ushort LayerChildLevel { get; set; } // see note 1
     public virtual ushort DefaultLayerWidthInPixels { get; set; }
     public virtual ushort DefaultLayerHeightInPixels { get; set; }
-    public virtual ushort BlendMode { get; set; }
+    public virtual BlendMode BlendMode { get; set; }
     public virtual byte   Opacity { get; set; }
     public virtual string LayerName { get; set; }
     public virtual uint   TilesetIndex { get; set; } // if layertype == 2
@@ -126,7 +126,7 @@ public class LayerChunkPartition : AseChunkPartition
         writer.Write(LayerChildLevel);
         writer.Write(DefaultLayerWidthInPixels);
         writer.Write(DefaultLayerHeightInPixels);
-        writer.Write(BlendMode);
+        writer.Write((ushort)BlendMode);
         writer.Write(Opacity);
         writer.Write(new byte[3]); // for future use
         EncodeString(writer, LayerName);
@@ -141,7 +141,7 @@ public class LayerChunkPartition : AseChunkPartition
         LayerChildLevel = reader.ReadUInt16();
         DefaultLayerWidthInPixels = reader.ReadUInt16();
         DefaultLayerHeightInPixels = reader.ReadUInt16();
-        BlendMode = reader.ReadUInt16();
+        BlendMode = (BlendMode)reader.ReadUInt16();
         Opacity = reader.ReadByte();
         reader.Read(new byte[3]); // for future use
         LayerName = DecodeString(reader);

@@ -26,17 +26,15 @@ public class AsefileMGExample : Game
         // TODO: Add your initialization logic here
         AseFile file = new AseFile("asset/chica.aseprite");
         chicaFrames = new FrameAtlas(file, _graphics.GraphicsDevice);
-        chicaFrame0 = chicaFrames[0].Value;
+        chicaFrame0 = chicaFrames[0];
         base.Initialize();
     }
-
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
         // TODO: use this.Content to load your game content here
     }
-
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
@@ -47,7 +45,6 @@ public class AsefileMGExample : Game
 
         base.Update(gameTime);
     }
-
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -55,7 +52,6 @@ public class AsefileMGExample : Game
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
         
         chicaFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
-        
         chicaFrame0.Draw(_spriteBatch, new Vector2(30, 80), scale: Vector2.One * 2);
 
         // TODO: Add your drawing code here

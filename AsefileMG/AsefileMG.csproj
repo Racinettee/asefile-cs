@@ -10,6 +10,7 @@
         </PackageReference>
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\Asefile.Common\Asefile.Common.csproj" />
       <ProjectReference Include="..\Asefile\Asefile.csproj" />
     </ItemGroup>
 </Project>

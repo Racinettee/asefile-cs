@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
 using Asefile;
+using Asefile.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -18,7 +17,7 @@ public struct Sprite
     /// <summary>
     /// The number of milliseconds the frame represented by this sprite should be shown before changing
     /// </summary>
-    public ushort MilliSeconds { get; init; }
+    public ushort Duration { get; init; }
     /// <summary>
     /// The region of the underlying texture to show
     /// </summary>
@@ -38,6 +37,38 @@ public struct Sprite
             sfx, layerDepth);
 }
 
+public class AnimatedSprite
+{
+    public List<Sprite> Frames { get; }
+    private int CurrentTime { get; set; }
+    private int CurrentFrame { get; set; }
+    public void Draw(SpriteBatch spriteBatch, Vector2 pos,
+        Color? color = null, Vector2? origin = null,
+        Vector2? scale = null, SpriteEffects sfx = SpriteEffects.None,
+        float rotation=0.0f, float layerDepth=0.0f) =>
+        Frames[CurrentFrame].Draw(spriteBatch, pos, color,
+            origin, scale, sfx, rotation, layerDepth);
+
+    public void Update(GameTime gt)
+    {
+        Frame.Update();
+    }
+
+    public AsePlayMode Frame { get; set; }
+    
+    public bool IsLooping { get; set; } = true; 
+    public bool IsPlaying { get; set; } = true;
+
+    public void Play() => IsPlaying = true;
+    public void Pause() => IsPlaying = false;
+    public void Stop()
+    {
+        IsPlaying = false;
+        CurrentFrame = 0;
+        CurrentTime = 0;
+    }
+}
+
 public class FrameAtlas : IEnumerable<Sprite>
 {
     public Texture2D TextureData { get; init; }
@@ -55,7 +86,7 @@ public class FrameAtlas : IEnumerable<Sprite>
             Sprites.Add(new Sprite()
             {
                 Texture = TextureData,
-                MilliSeconds = file.Frames[i].FrameDuration,
+                Duration = file.Frames[i].FrameDuration,
                 Region = new Rectangle(i * file.Width, 0, file.Width, file.Height),
             });
         }
@@ -78,16 +109,7 @@ public class FrameAtlas : IEnumerable<Sprite>
     /// Access a specific frame via frame indice
     /// </summary>
     /// <param name="frameNo">The frame index to access this atlas by</param>
-    public Sprite? this[int frameNo]
-    {
-        get
-        {
-            if (frameNo >= Count)
-                return null;
-            return Sprites[frameNo];
-        }
-        // set { } TBD
-    }
+    public Sprite this[int frameNo] => Sprites[frameNo];
 
     public List<Sprite>? this[string animationName]
     {
@@ -99,6 +121,16 @@ public class FrameAtlas : IEnumerable<Sprite>
             return Sprites.GetRange(animation.FromFrame, animation.ToFrame - animation.FromFrame);
         }
         // set { } TBD
+    }
+
+    public AnimatedSprite? GetAnimation(string tagName)
+    {
+        Tag? animTag;
+        Tags.TryGetValue(tagName, out animTag);
+        if (animTag is null)
+            return null;
+        
+        
     }
 
     public int Count => Sprites.Count;
