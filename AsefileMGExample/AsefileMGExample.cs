@@ -20,6 +20,7 @@ public class AsefileMGExample : Game
 
     private FrameAtlas chicaFrames;
     private Sprite chicaFrame0;
+    private AnimatedSprite chicaIdleDown;
     
     protected override void Initialize()
     {
@@ -27,6 +28,8 @@ public class AsefileMGExample : Game
         AseFile file = new AseFile("asset/chica.aseprite");
         chicaFrames = new FrameAtlas(file, _graphics.GraphicsDevice);
         chicaFrame0 = chicaFrames[0];
+        chicaIdleDown = chicaFrames.GetAnimation("IdleDown");
+        chicaIdleDown.Play();
         base.Initialize();
     }
     protected override void LoadContent()
@@ -42,6 +45,7 @@ public class AsefileMGExample : Game
             Exit();
 
         // TODO: Add your update logic here
+        chicaIdleDown.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -53,6 +57,7 @@ public class AsefileMGExample : Game
         
         chicaFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
         chicaFrame0.Draw(_spriteBatch, new Vector2(30, 80), scale: Vector2.One * 2);
+        chicaIdleDown.Draw(_spriteBatch, new Vector2(30, 150), scale: Vector2.One * 2);
 
         // TODO: Add your drawing code here
         _spriteBatch.End();

@@ -48,12 +48,12 @@ public class AsefileTests
         // In the UI the frames are shown starting from 1, in the binary data it starts from 0
         Assert.Equal(1, tags[0].FromFrame); // from frame 2, to frame 6
         Assert.Equal(5, tags[0].ToFrame);
-        Assert.Equal(0, tags[0].LoopDirection);
+        Assert.Equal(AnimationDirection.Forward, tags[0].LoopDirection);
         Assert.Equal(0, tags[0].RepeatTimes);
         
         Assert.Equal(6, tags[1].FromFrame); // from frame 7, to frame 8
         Assert.Equal(7, tags[1].ToFrame);
-        Assert.Equal(2, tags[1].LoopDirection);
+        Assert.Equal(AnimationDirection.PingPong, tags[1].LoopDirection);
         Assert.Equal(5, tags[1].RepeatTimes);
     }
     [Fact]

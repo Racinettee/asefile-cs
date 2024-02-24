@@ -41,7 +41,19 @@ public class AnimatedSprite
 {
     public List<Sprite> Frames { get; }
     private int CurrentTime { get; set; }
-    private int CurrentFrame { get; set; }
+
+    private int CurrentFrame
+    {
+        get => PlayMode.Frame;
+        set => PlayMode.Frame = value;
+    }
+
+    public AnimatedSprite(Tag animTag, List<Sprite> allFrames)
+    {
+        Frames = allFrames.GetRange(animTag.FromFrame, (animTag.ToFrame - animTag.FromFrame) + 1);
+        PlayMode = AsePlayMode.FromEnum(animTag.LoopDirection, (animTag.ToFrame - animTag.FromFrame) + 1); // add 1 because the frame range is inclusive
+    }
+    
     public void Draw(SpriteBatch spriteBatch, Vector2 pos,
         Color? color = null, Vector2? origin = null,
         Vector2? scale = null, SpriteEffects sfx = SpriteEffects.None,
@@ -51,10 +63,18 @@ public class AnimatedSprite
 
     public void Update(GameTime gt)
     {
-        Frame.Update();
+        CurrentTime += gt.ElapsedGameTime.Milliseconds;
+        var targetFrame = PlayMode.Frame;
+
+        while (CurrentTime >= Frames[targetFrame].Duration)
+        {
+            CurrentTime -= Frames[targetFrame].Duration;
+            PlayMode.Update();  // Update the animation logic
+            targetFrame = PlayMode.Frame; // In case it changed
+        }
     }
 
-    public AsePlayMode Frame { get; set; }
+    public AsePlayMode PlayMode { get; set; }
     
     public bool IsLooping { get; set; } = true; 
     public bool IsPlaying { get; set; } = true;
@@ -118,7 +138,7 @@ public class FrameAtlas : IEnumerable<Sprite>
             Tag? animation;
             if (!Tags.TryGetValue(animationName, out animation))
                 return null;
-            return Sprites.GetRange(animation.FromFrame, animation.ToFrame - animation.FromFrame);
+            return Sprites.GetRange(animation.FromFrame, (animation.ToFrame - animation.FromFrame) + 1);
         }
         // set { } TBD
     }
@@ -127,10 +147,12 @@ public class FrameAtlas : IEnumerable<Sprite>
     {
         Tag? animTag;
         Tags.TryGetValue(tagName, out animTag);
+        
         if (animTag is null)
             return null;
-        
-        
+
+        AnimatedSprite result = new AnimatedSprite(animTag, Sprites);
+        return result;
     }
 
     public int Count => Sprites.Count;

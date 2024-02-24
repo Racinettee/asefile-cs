@@ -5,7 +5,7 @@
 /// </summary>
 public abstract class AsePlayMode
 {
-    public int Frame { get; protected set; }
+    public int Frame { get; set; }
 
     public int TotalFrames { get; protected set; }
     public AsePlayMode(int maxFrames, int startingFrame = 0)
@@ -14,6 +14,17 @@ public abstract class AsePlayMode
         TotalFrames = maxFrames;
     }
     public abstract void Update();
+
+    public static AsePlayMode FromEnum(AnimationDirection animMode, int maxFrames, int startingFrame = 0)
+    {
+        return animMode switch
+        {
+            AnimationDirection.Forward => new AseForwardMode(maxFrames, startingFrame),
+            AnimationDirection.Reverse => new AseReverseMode(maxFrames, startingFrame),
+            AnimationDirection.PingPong => new AsePingPongMode(maxFrames, startingFrame, false),
+            AnimationDirection.PingPongReverse => new AsePingPongMode(maxFrames, startingFrame, true),
+        };
+    }
 }
 
 /// <summary>

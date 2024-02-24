@@ -524,7 +524,7 @@ public class Tag : AseChunkPartition
 {
     public virtual ushort FromFrame { get; set; }
     public virtual ushort ToFrame { get; set; }
-    public virtual byte   LoopDirection { get; set; }
+    public virtual AnimationDirection LoopDirection { get; set; }
     public virtual ushort RepeatTimes { get; set; }
     public virtual string TagName { get; set; }
 
@@ -541,7 +541,7 @@ public class Tag : AseChunkPartition
     {
         FromFrame = reader.ReadUInt16();
         ToFrame = reader.ReadUInt16();
-        LoopDirection = reader.ReadByte();
+        LoopDirection = (AnimationDirection)reader.ReadByte();
         RepeatTimes = reader.ReadUInt16();
         reader.Read(new byte[6]); // reserved for future
         reader.Read(new byte[3]); // deprecated rgb value of tag color
