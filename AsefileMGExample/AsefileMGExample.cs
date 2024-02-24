@@ -57,7 +57,7 @@ public class AsefileMGExample : Game
         
         chicaFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
         chicaFrame0.Draw(_spriteBatch, new Vector2(30, 80), scale: Vector2.One * 2);
-        chicaIdleDown.Draw(_spriteBatch, new Vector2(30, 150), scale: Vector2.One * 2);
+        chicaIdleDown.Draw(_spriteBatch, new Vector2(78, 80), scale: Vector2.One * 2);
 
         // TODO: Add your drawing code here
         _spriteBatch.End();
