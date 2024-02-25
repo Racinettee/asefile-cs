@@ -21,6 +21,7 @@ public class AsefileMGExample : Game
     private FrameAtlas chicaFrames;
     private AseSprite chicaFrame0;
     private AseSprite chicaFrame9;
+    private AseSprite chicaFrame10;
     private AseAnimatedSprite chicaIdleDown;
     
     protected override void Initialize()
@@ -30,6 +31,7 @@ public class AsefileMGExample : Game
         chicaFrames = new FrameAtlas(file, _graphics.GraphicsDevice);
         chicaFrame0 = chicaFrames[0];
         chicaFrame9 = chicaFrames[9];
+        chicaFrame10 = chicaFrames[10];
         chicaIdleDown = chicaFrames.GetAnimation("IdleDown");
         chicaIdleDown.Play();
         base.Initialize();
@@ -60,7 +62,8 @@ public class AsefileMGExample : Game
         chicaFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
         chicaFrame0.Draw(_spriteBatch, new Vector2(30, 80), scale: Vector2.One * 2);
         chicaIdleDown.Draw(_spriteBatch, new Vector2(78, 80), scale: Vector2.One * 2);
-        chicaFrame9.Draw(_spriteBatch, new Vector2(112, 80), scale: Vector2.One * 4);
+        chicaFrame9.Draw(_spriteBatch, new Vector2(112, 80), scale: Vector2.One * 6);
+        chicaFrame10.Draw(_spriteBatch, new Vector2(220, 80), scale: Vector2.One * 6);
 
         // TODO: Add your drawing code here
         _spriteBatch.End();

@@ -44,14 +44,21 @@ public static class AseBlender
 
         return Color.FromArgb(source.A, r, g, b);
     }
-
     public static Color Screen(Color source, Color target)
     {
-        var r = 255 - (((255 - source.R) * (255 - target.R)) / 255);
-        var g = 255 - (((255 - source.G) * (255 - target.G)) / 255);
-        var b = 255 - (((255 - source.B) * (255 - target.B)) / 255);
+        var r = 255 - (255 - source.R) * (255 - target.R) / 255;
+        var g = 255 - (255 - source.G) * (255 - target.G) / 255;
+        var b = 255 - (255 - source.B) * (255 - target.B) / 255;
 
         return Color.FromArgb(source.A, r, g, b); 
+    }
+    public static Color Dodge(Color source, Color target)
+    {
+        var r = source.R == 255 ? 255 : Math.Min(255, target.R * 255 / (255 - source.R));
+        var g = source.G == 255 ? 255 : Math.Min(255, target.G * 255 / (255 - source.G));
+        var b = source.B == 255 ? 255 : Math.Min(255, target.B * 255 / (255 - source.B));
+
+        return Color.FromArgb(target.A, r, g, b);
     }
     public static Color Additive(Color source, Color target)
     {
@@ -61,17 +68,53 @@ public static class AseBlender
 
         return Color.FromArgb(source.A, r, g, b);
     }
+    // -------------------------------------
+    public static Color Overlay(Color source, Color target)
+    {
+        var r = target.R < 128 ? 2 * target.R * source.R / 255 : 
+            255 - 2 * (255 - target.R) * (255 - source.R) / 255;
+        var g = target.G < 128 ? 2 * target.G * source.G / 255 : 
+            255 - 2 * (255 - target.G) * (255 - source.G) / 255;
+        var b = target.B < 128 ? 2 * target.B * source.B / 255 : 
+            255 - 2 * (255 - target.B) * (255 - source.B) / 255;
+
+        return Color.FromArgb(target.A, r, g, b);
+    }
+
+    public static Color SoftLight(Color source, Color target)
+    {
+        int ComponentBlend(int baseComp, int overlayComp)
+        {
+            var b = baseComp / 255.0;
+            var s = overlayComp / 255.0;
+            var d = b <= 0.25 ? ((16 * b - 12) * b + 4) * b : Math.Sqrt(b);
+            var result = s <= 0.5 ? b - (1.0 - 2.0 * s) * b * (1.0 - b) : b + (2.0 * s - 1.0) * (d - b);
+            return (int)(result * 255 + 0.5);
+        };
+
+        var r = ComponentBlend(target.R, source.R);
+        var g = ComponentBlend(target.G, source.G);
+        var b = ComponentBlend(target.B, source.B);
+
+        return Color.FromArgb(source.A, r, g, b);
+    }
+    // .....................................
     public static Func<Color, Color, Color> GetBlender(BlendMode blendMode)
     {
         var blendFunc = blendMode switch
         {
-            BlendMode.Darken => Darken,
-            BlendMode.Multiply => Multiply,
+            // -------------------------
+            BlendMode.Darken    => Darken,
+            BlendMode.Multiply  => Multiply,
             BlendMode.ColorBurn => Burn,
+            // -------------------------
             BlendMode.Lighten => Lighten,
             BlendMode.Screen => Screen,
+            BlendMode.ColorDodge => Dodge,
             BlendMode.Addition => new Func<Color, Color, Color>(Additive),
-
+            // -------------------------
+            BlendMode.Overlay => Overlay,
+            BlendMode.SoftLight => SoftLight,
             _ => Normal,
         };
         return (source, target) =>
