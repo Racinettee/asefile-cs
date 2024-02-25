@@ -3,18 +3,11 @@
 /// <summary>
 /// AseAnimationDirection encapsulates the logic of stepping an animation to the next frame
 /// </summary>
-public abstract class AsePlayMode
+public abstract class AsePlayMode(int maxFrames, int startingFrame = 0)
 {
-    public int Frame { get; set; }
-
-    public int TotalFrames { get; protected set; }
-    public AsePlayMode(int maxFrames, int startingFrame = 0)
-    {
-        Frame = startingFrame;
-        TotalFrames = maxFrames;
-    }
+    public int Frame { get; set; } = startingFrame;
+    public int TotalFrames { get; protected set; } = maxFrames;
     public abstract void Update();
-
     public static AsePlayMode FromEnum(AnimationDirection animMode, int maxFrames, int startingFrame = 0)
     {
         return animMode switch
@@ -30,12 +23,8 @@ public abstract class AsePlayMode
 /// <summary>
 /// When an animation uses this animationdirection the frames will progress forward normally
 /// </summary>
-public class AseForwardMode : AsePlayMode
+public class AseForwardMode(int maxFrames, int startingFrame = 0) : AsePlayMode(maxFrames, startingFrame)
 {
-    public AseForwardMode(int maxFrames, int startingFrame = 0)
-        : base(maxFrames, startingFrame)
-    {
-    }
     public override void Update()
     {
         Frame++;
@@ -47,13 +36,8 @@ public class AseForwardMode : AsePlayMode
 /// <summary>
 /// When an animation uses this animation direction the frames will progress backwards
 /// </summary>
-public class AseReverseMode : AsePlayMode
+public class AseReverseMode(int maxFrames, int startingFrame = 0) : AsePlayMode(maxFrames, startingFrame)
 {
-    public AseReverseMode(int maxFrames, int startingFrame = 0)
-        : base(maxFrames, startingFrame)
-    {
-    }
-
     public override void Update()
     {
         Frame--;
@@ -65,15 +49,10 @@ public class AseReverseMode : AsePlayMode
 /// <summary>
 /// When using Ping-Pong mode an animation will progress to the end and then back to the beginning
 /// </summary>
-public class AsePingPongMode : AsePlayMode
+public class AsePingPongMode(int maxFrames, int startingFrame = 0, bool reverse = false)
+    : AsePlayMode(maxFrames, startingFrame)
 {
-    public AsePingPongMode(int maxFrames, int startingFrame = 0, bool reverse = false)
-        : base(maxFrames, startingFrame)
-    {
-        _playingForward = !reverse;
-    }
-    
-    private bool _playingForward = true;
+    private bool _playingForward = !reverse;
     public override void Update()
     {
         if (_playingForward)

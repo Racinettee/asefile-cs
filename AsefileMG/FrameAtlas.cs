@@ -8,7 +8,7 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace AsefileMG;
 
-public struct Sprite
+public struct AseSprite
 {
     /// <summary>
     /// The texture reference
@@ -37,9 +37,9 @@ public struct Sprite
             sfx, layerDepth);
 }
 
-public class AnimatedSprite
+public class AseAnimatedSprite
 {
-    public List<Sprite> Frames { get; }
+    public List<AseSprite> Frames { get; }
     private int CurrentTime { get; set; }
 
     private int CurrentFrame
@@ -48,7 +48,7 @@ public class AnimatedSprite
         set => PlayMode.Frame = value;
     }
 
-    public AnimatedSprite(Tag animTag, List<Sprite> allFrames)
+    public AseAnimatedSprite(Tag animTag, List<AseSprite> allFrames)
     {
         Frames = allFrames.GetRange(animTag.FromFrame, (animTag.ToFrame - animTag.FromFrame) + 1);
         PlayMode = AsePlayMode.FromEnum(animTag.LoopDirection, (animTag.ToFrame - animTag.FromFrame) + 1); // add 1 because the frame range is inclusive
@@ -63,6 +63,9 @@ public class AnimatedSprite
 
     public void Update(GameTime gt)
     {
+        if (!IsPlaying)
+            return;
+        
         CurrentTime += gt.ElapsedGameTime.Milliseconds;
         var targetFrame = PlayMode.Frame;
 
@@ -89,11 +92,11 @@ public class AnimatedSprite
     }
 }
 
-public class FrameAtlas : IEnumerable<Sprite>
+public class FrameAtlas : IEnumerable<AseSprite>
 {
     public Texture2D TextureData { get; init; }
     public Dictionary<string, Tag> Tags { get; init; } = new();
-    private List<Sprite> Sprites { get; init; } = new();
+    private List<AseSprite> Sprites { get; init; } = new();
 
     public FrameAtlas(AseFile file, GraphicsDevice graphicsDevice)
     {
@@ -103,7 +106,7 @@ public class FrameAtlas : IEnumerable<Sprite>
             Tags[tag.TagName] = tag;
         for (int i = 0; i < file.Frames.Count; i++)
         {
-            Sprites.Add(new Sprite()
+            Sprites.Add(new AseSprite()
             {
                 Texture = TextureData,
                 Duration = file.Frames[i].FrameDuration,
@@ -129,9 +132,9 @@ public class FrameAtlas : IEnumerable<Sprite>
     /// Access a specific frame via frame indice
     /// </summary>
     /// <param name="frameNo">The frame index to access this atlas by</param>
-    public Sprite this[int frameNo] => Sprites[frameNo];
+    public AseSprite this[int frameNo] => Sprites[frameNo];
 
-    public List<Sprite>? this[string animationName]
+    public List<AseSprite>? this[string animationName]
     {
         get
         {
@@ -143,7 +146,7 @@ public class FrameAtlas : IEnumerable<Sprite>
         // set { } TBD
     }
 
-    public AnimatedSprite? GetAnimation(string tagName)
+    public AseAnimatedSprite? GetAnimation(string tagName)
     {
         Tag? animTag;
         Tags.TryGetValue(tagName, out animTag);
@@ -151,12 +154,12 @@ public class FrameAtlas : IEnumerable<Sprite>
         if (animTag is null)
             return null;
 
-        AnimatedSprite result = new AnimatedSprite(animTag, Sprites);
+        AseAnimatedSprite result = new AseAnimatedSprite(animTag, Sprites);
         return result;
     }
 
     public int Count => Sprites.Count;
-    public IEnumerator<Sprite> GetEnumerator() => Sprites.GetEnumerator();
+    public IEnumerator<AseSprite> GetEnumerator() => Sprites.GetEnumerator();
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

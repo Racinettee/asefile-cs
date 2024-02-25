@@ -1,5 +1,6 @@
 ﻿using System;
 using Asefile;
+using Asefile.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,6 +19,9 @@ public static class Texture2DLoader
             int offsetX = frame * file.Width;
             foreach (var cel in file.Frames[frame].Cels)
             {
+                var layer = file.Frames[0].Layers[cel.LayerIndex];
+                var blendFunc = AseBlender.GetBlender(layer.BlendMode);
+
                 // Loop through each pixel in the cel, and blit it into the buffer
                 for (int celY = 0; celY < cel.HeightInPixels; celY++)
                 for (int celX = 0; celX < cel.WidthInPixels; celX++)
@@ -25,9 +29,12 @@ public static class Texture2DLoader
                     var pixel = cel.PixelData[celX + celY * cel.WidthInPixels];
                     if (pixel.A == 0)
                         continue;
-                    chicaBuffer[(offsetX + celX + cel.XPos + ((celY + cel.YPos) * file.Width * file.Frames.Count))] =
-                        // asefile is System.Drawing.Color - and monogame uses Xna color
-                        new Color((byte)pixel.R, (byte)pixel.G, (byte)pixel.B, (byte)pixel.A);
+
+                    var pixelPos = (offsetX + celX + cel.XPos + ((celY + cel.YPos) * file.Width * file.Frames.Count));
+                    var backDropPixel = chicaBuffer[pixelPos];
+                    var backdropCol = System.Drawing.Color.FromArgb(backDropPixel.A, backDropPixel.R, backDropPixel.G, backDropPixel.B) ;
+                    var blendedColor = blendFunc(pixel, backdropCol);
+                    chicaBuffer[pixelPos] = new Color(r: blendedColor.R, g: blendedColor.G, b: blendedColor.B, alpha: blendedColor.A);
                 }
             }
         }
