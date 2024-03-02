@@ -71,19 +71,19 @@ public static class AseBlender
     // -------------------------------------
     public static Color Overlay(Color source, Color target)
     {
-        var r = target.R < 128 ? 2 * target.R * source.R / 255 : 
-            255 - 2 * (255 - target.R) * (255 - source.R) / 255;
-        var g = target.G < 128 ? 2 * target.G * source.G / 255 : 
-            255 - 2 * (255 - target.G) * (255 - source.G) / 255;
-        var b = target.B < 128 ? 2 * target.B * source.B / 255 : 
-            255 - 2 * (255 - target.B) * (255 - source.B) / 255;
+        int overlay(int b, int s) => b < 128 ? 2 * b * s / 255 
+                                             : 255 - 2 * (255 - b) * (255 - s) / 255;
 
-        return Color.FromArgb(target.A, r, g, b);
+        var r = overlay(target.R, source.R);
+        var g = overlay(target.G, source.G);
+        var b = overlay(target.B, source.B);
+
+        return Color.FromArgb(source.A, r, g, b);
     }
 
     public static Color SoftLight(Color source, Color target)
     {
-        int ComponentBlend(int baseComp, int overlayComp)
+        int softLight(int baseComp, int overlayComp)
         {
             var b = baseComp / 255.0;
             var s = overlayComp / 255.0;
@@ -92,12 +92,52 @@ public static class AseBlender
             return (int)(result * 255 + 0.5);
         };
 
-        var r = ComponentBlend(target.R, source.R);
-        var g = ComponentBlend(target.G, source.G);
-        var b = ComponentBlend(target.B, source.B);
+        var r = softLight(target.R, source.R);
+        var g = softLight(target.G, source.G);
+        var b = softLight(target.B, source.B);
 
         return Color.FromArgb(source.A, r, g, b);
     }
+
+    public static Color HardLight(Color source, Color target)
+    {
+        int hardLight(int b, int s)
+        {
+            if (s < 128)
+            {
+                s <<= 1;
+                return MulUn8(b, s);
+            }
+            s = (s << 1) - 255;
+            return b + s - MulUn8(b, s);
+        }
+        var r = hardLight(target.R, source.R);
+        var g = hardLight(target.G, source.G);
+        var b = hardLight(target.B, source.B);
+
+        return Color.FromArgb(source.A, r, g, b);
+    }
+    // --------------------------------
+    public static Color Difference(Color source, Color target) =>
+        Color.FromArgb(source.A,
+            Math.Abs(source.R - target.R),
+            Math.Abs(source.G - target.G),
+            Math.Abs(source.B - target.B));
+
+    public static Color Exclusion(Color source, Color target)
+    {
+        int exclusion(int b, int s) => b + s - 2 * MulUn8(b, s);
+        var r = exclusion(target.R, source.R);
+        var g = exclusion(target.G, source.G);
+        var b = exclusion(target.B, source.B);
+
+        return Color.FromArgb(source.A, r, g, b);
+    }
+
+    // public static Color Subtract(Color source, Color target)
+    // {
+    //     
+    // }
     // .....................................
     public static Func<Color, Color, Color> GetBlender(BlendMode blendMode)
     {
@@ -115,6 +155,10 @@ public static class AseBlender
             // -------------------------
             BlendMode.Overlay => Overlay,
             BlendMode.SoftLight => SoftLight,
+            BlendMode.HardLight => HardLight,
+            // -------------------------
+            BlendMode.Difference => Difference,
+            BlendMode.Exclusion => Exclusion,
             _ => Normal,
         };
         return (source, target) =>
