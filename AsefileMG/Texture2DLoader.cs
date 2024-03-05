@@ -33,8 +33,9 @@ public static class Texture2DLoader
                     var pixelPos = (offsetX + celX + cel.XPos + ((celY + cel.YPos) * file.Width * file.Frames.Count));
                     var backDropPixel = chicaBuffer[pixelPos];
                     var backdropCol = System.Drawing.Color.FromArgb(backDropPixel.A, backDropPixel.R, backDropPixel.G, backDropPixel.B) ;
-                    var blendedColor = blendFunc(pixel, backdropCol);
-                    chicaBuffer[pixelPos] = new Color(r: blendedColor.R, g: blendedColor.G, b: blendedColor.B, alpha: blendedColor.A);
+                    var blendedColor = blendFunc(pixel, backdropCol, layer.Opacity);
+                    chicaBuffer[pixelPos] =
+                        new Color(r: blendedColor.R, g: blendedColor.G, b: blendedColor.B, alpha: blendedColor.A);
                 }
             }
         }

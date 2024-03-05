@@ -55,9 +55,9 @@ public class AsefileMGExample : Game
     }
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(Color.Gray);
         
-        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);//, blendState: BlendState.AlphaBlend);
         
         chicaFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
         chicaFrame0.Draw(_spriteBatch, new Vector2(30, 80), scale: Vector2.One * 2);
@@ -65,7 +65,6 @@ public class AsefileMGExample : Game
         chicaFrame9.Draw(_spriteBatch, new Vector2(112, 80), scale: Vector2.One * 6);
         chicaFrame10.Draw(_spriteBatch, new Vector2(220, 80), scale: Vector2.One * 6);
 
-        // TODO: Add your drawing code here
         _spriteBatch.End();
         base.Draw(gameTime);
     }
