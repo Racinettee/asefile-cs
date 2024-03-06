@@ -16,6 +16,7 @@ This library is a utility for loading aseprite image data as well as some utilit
 - Test other color encodings
 - Expand class libraries for monogame & godot
 - Create nuget packages for godot and monogame usage respectively
+- The godot SpriteFrameUtils should be improved to use the AsePlayMode class to play the animation under the hood so that ping-pong/reverse animations are generated accurately
 # Example using the base library: Render in MonoGame
 ```csharp
 private Texture2D chicaTexture;
