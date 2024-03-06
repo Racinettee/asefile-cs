@@ -1,14 +1,22 @@
 # Welcome to asefile
-This library is a utility for just loading aseprite image data
+This library is a utility for loading aseprite image data as well as some utilities for using them in Godot and MonogGame.
+
+- **Asefile** can be used to supply the decoded structure of an aseprite file
+- **Asefile.Common** includes blending functions and some classes to step frames for animator utilities
+- **AsefileMG** includes utilities to render an aseprite onto a MonoGame texture, as well as some utilities to render individual frames or some animated sprites as well.
+  - An included example project demonstrates how to use those utilities **(see AsefileMGExample.cs)**
+- **Asefile.Godot** includes a utility to generate a SpriteFrames from an AseFile object given a set of tags
+  - An included example godot project is included that can be loaded in the editor demonstrates how to use the utility as well as generates a tres. **(see node2d.cs)**
 ## What is untested/unsupported?
 - Grayscale and indexed colors are untested
-- Encoding back into an aseprite file is unsupported
+- Encoding back into an aseprite file is unsupported as of yet
 - Tiles are untested
 ## Future goals
-- To support encoding
+- To support encoding to an aseprite file
 - Test other color encodings
-- Include basic class libs for monogame & godot that achieve whats shown in the examples
-# Example: Render in MonoGame
+- Expand class libraries for monogame & godot
+- Create nuget packages for godot and monogame usage respectively
+# Example using the base library: Render in MonoGame
 ```csharp
 private Texture2D chicaTexture;
 
@@ -56,7 +64,7 @@ public static Texture2D GenerateTexture2DFromAseFile(AseFile aseFile, GraphicsDe
 The results will look like this:
 
 ![chica.png](chica.png)
-# Example: Render in Godot 4
+# Example using the base library: Render in Godot 4
 This example is a little bit more simple. Presuming you have a Sprite2D named Sprite2D in your tree, the code is mostly the same:
 ```csharp
 public partial class Node2D : Godot.Node2D
@@ -96,3 +104,6 @@ public partial class Node2D : Godot.Node2D
 ```
 From that the output will look the same as the above picture, except in Godot a dark grey background is the default.
 With a restructure of this code a `SpriteFrames` could be constructed for an `AnimatedSprite2D`.
+# References
+- The [ase-file spec](https://github.com/aseprite/aseprite/blob/main/docs/ase-file-specs.md)
+- monogame-asprite [BlendFunctions.cs](https://github.com/AristurtleDev/monogame-aseprite/blob/main/source/MonoGame.Aseprite.Shared/Utilities/BlendFunctions.cs)
