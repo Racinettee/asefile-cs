@@ -17,7 +17,7 @@ public static class AseBlender
     }
     private static byte MulUn8(int a, int b)
     {
-        var t = (a * b) + 0x80;
+        var t = a * b + 0x80;
         return (byte)(((t >> 8) + t) >> 8);
     }
     private static byte DivUn8(int a, int b) => (byte)(((ushort)a * 0xFF + b / 2) / b);
@@ -237,14 +237,14 @@ public static class AseBlender
 
             var blendResult = blendFunc(source, target);
 
-            int Sa = MulUn8(blendResult.A, opacity);
-            int Ra = Sa + target.A - MulUn8(Sa, target.A);
+            var Sa = MulUn8(blendResult.A, opacity);
+            var Ra = Sa + target.A - MulUn8(Sa, target.A);
 
-            int Rr = target.R + (blendResult.R - target.R) * Sa / Ra;
-            int Rg = target.G + (blendResult.G - target.G) * Sa / Ra;
-            int Rb = target.B + (blendResult.B - target.B) * Sa / Ra;
-
-            return Color.FromArgb(Ra, Rr, Rg, Rb);
+            return Color.FromArgb(
+                Ra,
+                target.R + (blendResult.R - target.R) * Sa / Ra,
+                target.G + (blendResult.G - target.G) * Sa / Ra,
+                target.B + (blendResult.B - target.B) * Sa / Ra);
         };
     }
 }

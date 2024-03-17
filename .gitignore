@@ -1,3 +1,6 @@
+#Paket dependency manager
+paket-files/
+
 # Godot cache files
 .godot
 
