@@ -8,7 +8,15 @@ using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace AsefileMG;
 
-public struct AseSprite
+public interface AseDrawable
+{
+    void Draw(SpriteBatch spriteBatch, Vector2 pos,
+        Color? color = null, Vector2? origin = null,
+        Vector2? scale = null, SpriteEffects sfx = SpriteEffects.None,
+        float rotation = 0.0f, float layerDepth = 0.0f);
+}
+
+public struct AseSprite : AseDrawable
 {
     /// <summary>
     /// The texture reference
@@ -37,7 +45,7 @@ public struct AseSprite
             sfx, layerDepth);
 }
 
-public class AseAnimatedSprite
+public class AseAnimatedSprite : AseDrawable
 {
     public List<AseSprite> Frames { get; }
     private int CurrentTime { get; set; }

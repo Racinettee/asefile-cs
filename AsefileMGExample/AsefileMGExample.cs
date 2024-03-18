@@ -21,7 +21,7 @@ public class AsefileMGExample : Game
     private FrameAtlas chicaFrames;
     private AseSprite chicaFrame0;
     private AseSprite chicaFrame9;
-    private AseSprite chicaFrame10;
+    private AseDrawable chicaFrame10;
     private AseAnimatedSprite chicaIdleDown;
     
     protected override void Initialize()
