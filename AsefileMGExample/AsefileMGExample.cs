@@ -1,5 +1,5 @@
 ﻿using Asefile;
-using AsefileMG;
+using Asefile.Mon;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -18,7 +18,7 @@ public class AsefileMGExample : Game
         IsMouseVisible = true;
     }
 
-    private FrameAtlas chicaFrames;
+    private AseFrameAtlas _chicaAseFrames;
     private AseSprite chicaFrame0;
     private AseSprite chicaFrame9;
     private AseDrawable chicaFrame10;
@@ -28,11 +28,11 @@ public class AsefileMGExample : Game
     {
         // TODO: Add your initialization logic here
         AseFile file = new AseFile("asset/chica.aseprite");
-        chicaFrames = new FrameAtlas(file, _graphics.GraphicsDevice);
-        chicaFrame0 = chicaFrames[0];
-        chicaFrame9 = chicaFrames[9];
-        chicaFrame10 = chicaFrames[10];
-        chicaIdleDown = chicaFrames.GetAnimation("IdleDown");
+        _chicaAseFrames = new AseFrameAtlas(file, _graphics.GraphicsDevice);
+        chicaFrame0 = _chicaAseFrames[0];
+        chicaFrame9 = _chicaAseFrames[9];
+        chicaFrame10 = _chicaAseFrames[10];
+        chicaIdleDown = _chicaAseFrames.GetAnimation("IdleDown");
         chicaIdleDown.Play();
         base.Initialize();
     }
@@ -59,7 +59,7 @@ public class AsefileMGExample : Game
         
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);//, blendState: BlendState.AlphaBlend);
         
-        chicaFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
+        _chicaAseFrames.Draw(_spriteBatch, new Vector2(10, 10), scale: Vector2.One * 2);
         chicaFrame0.Draw(_spriteBatch, new Vector2(30, 80), scale: Vector2.One * 2);
         chicaIdleDown.Draw(_spriteBatch, new Vector2(78, 80), scale: Vector2.One * 2);
         chicaFrame9.Draw(_spriteBatch, new Vector2(112, 80), scale: Vector2.One * 6);

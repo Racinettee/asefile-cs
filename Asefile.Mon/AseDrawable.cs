@@ -1,12 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using Asefile;
 using Asefile.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
-namespace AsefileMG;
+namespace Asefile.Mon;
 
 public interface AseDrawable
 {
@@ -14,6 +12,9 @@ public interface AseDrawable
         Color? color = null, Vector2? origin = null,
         Vector2? scale = null, SpriteEffects sfx = SpriteEffects.None,
         float rotation = 0.0f, float layerDepth = 0.0f);
+    
+    int Width { get; }
+    int Height { get; }
 }
 
 public struct AseSprite : AseDrawable
@@ -43,6 +44,9 @@ public struct AseSprite : AseDrawable
             origin ?? Vector2.Zero,
             scale ?? Vector2.One,
             sfx, layerDepth);
+
+    public int Width => Region.Width;
+    public int Height => Region.Height;
 }
 
 public class AseAnimatedSprite : AseDrawable
@@ -50,7 +54,7 @@ public class AseAnimatedSprite : AseDrawable
     public List<AseSprite> Frames { get; }
     private int CurrentTime { get; set; }
 
-    private int CurrentFrame
+    public int CurrentFrame
     {
         get => PlayMode.Frame;
         set => PlayMode.Frame = value;
@@ -68,6 +72,9 @@ public class AseAnimatedSprite : AseDrawable
         float rotation=0.0f, float layerDepth=0.0f) =>
         Frames[CurrentFrame].Draw(spriteBatch, pos, color,
             origin, scale, sfx, rotation, layerDepth);
+
+    public int Width => Frames[CurrentFrame].Width;
+    public int Height => Frames[CurrentFrame].Height;
 
     public void Update(GameTime gt)
     {
@@ -98,76 +105,4 @@ public class AseAnimatedSprite : AseDrawable
         CurrentFrame = 0;
         CurrentTime = 0;
     }
-}
-
-public class FrameAtlas : IEnumerable<AseSprite>
-{
-    public Texture2D TextureData { get; init; }
-    public Dictionary<string, Tag> Tags { get; init; } = new();
-    private List<AseSprite> Sprites { get; init; } = new();
-
-    public FrameAtlas(AseFile file, GraphicsDevice graphicsDevice)
-    {
-        TextureData = Texture2DLoader.LoadAsefile(file, graphicsDevice);
-        var frame1Tags = file.Frames[0].Tags;
-        foreach (var tag in frame1Tags)
-            Tags[tag.TagName] = tag;
-        for (int i = 0; i < file.Frames.Count; i++)
-        {
-            Sprites.Add(new AseSprite()
-            {
-                Texture = TextureData,
-                Duration = file.Frames[i].FrameDuration,
-                Region = new Rectangle(i * file.Width, 0, file.Width, file.Height),
-            });
-        }
-    }
-    
-    public void Draw(SpriteBatch spriteBatch, Vector2 pos,
-        Color? color = null, Vector2? origin = null,
-        Vector2? scale = null, SpriteEffects sfx = SpriteEffects.None,
-        float rotation=0.0f, float layerDepth=0.0f) =>
-        spriteBatch.Draw(TextureData,
-            pos,
-            null,
-            color ?? Color.White,
-            rotation,
-            origin ?? Vector2.Zero,
-            scale ?? Vector2.One,
-            sfx, layerDepth);
-
-    /// <summary>
-    /// Access a specific frame via frame indice
-    /// </summary>
-    /// <param name="frameNo">The frame index to access this atlas by</param>
-    public AseSprite this[int frameNo] => Sprites[frameNo];
-
-    public List<AseSprite>? this[string animationName]
-    {
-        get
-        {
-            Tag? animation;
-            if (!Tags.TryGetValue(animationName, out animation))
-                return null;
-            return Sprites.GetRange(animation.FromFrame, (animation.ToFrame - animation.FromFrame) + 1);
-        }
-        // set { } TBD
-    }
-
-    public AseAnimatedSprite? GetAnimation(string tagName)
-    {
-        Tag? animTag;
-        Tags.TryGetValue(tagName, out animTag);
-        
-        if (animTag is null)
-            return null;
-
-        AseAnimatedSprite result = new AseAnimatedSprite(animTag, Sprites);
-        return result;
-    }
-
-    public int Count => Sprites.Count;
-    public IEnumerator<AseSprite> GetEnumerator() => Sprites.GetEnumerator();
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

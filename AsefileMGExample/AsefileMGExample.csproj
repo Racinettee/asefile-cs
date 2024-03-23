@@ -28,7 +28,7 @@
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\AsefileMG\AsefileMG.csproj" />
+      <ProjectReference Include="..\Asefile.Mon\Asefile.Mon.csproj" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="asset\" />

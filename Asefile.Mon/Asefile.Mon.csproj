@@ -3,6 +3,7 @@
         <TargetFramework>net7.0</TargetFramework>
         <LangVersion>11</LangVersion>
         <Nullable>enable</Nullable>
+        <RootNamespace>AsefileMG</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">

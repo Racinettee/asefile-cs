@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asefile", "Asefile\Asefile.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsefileTests", "AsefileTests\AsefileTests.csproj", "{395858C4-F988-4CC9-8141-5514295C7711}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsefileMG", "AsefileMG\AsefileMG.csproj", "{C433B3AE-3A51-48A5-BC22-C2BC9FF038CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asefile.Mon", "Asefile.Mon\Asefile.Mon.csproj", "{C433B3AE-3A51-48A5-BC22-C2BC9FF038CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsefileMGExample", "AsefileMGExample\AsefileMGExample.csproj", "{3B11FCE3-0ADD-4317-BA8E-913826FB2C6A}"
 EndProject

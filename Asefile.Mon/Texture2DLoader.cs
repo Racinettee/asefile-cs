@@ -4,11 +4,11 @@ using Asefile.Common;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace AsefileMG;
+namespace Asefile.Mon;
 
-public static class Texture2DLoader
+public static class AseTexture2DLoader
 {
-    public static Texture2D LoadAsefile(AseFile file, GraphicsDevice graphicsDevice)
+    public static Texture2D LoadFile(AseFile file, GraphicsDevice graphicsDevice)
     {
         var resultTexture = new Texture2D(graphicsDevice, file.Width * file.Frames.Count, file.Height);
         // Allocate a pixel buffer that acomodates all of the frames by multiplying the width by number of frames
